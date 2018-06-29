@@ -35,7 +35,7 @@ redis:
   sentinel:
     master: mymaster
     nodes: 192.168.101.1:6379,192.168.102.1:6379,192.168.103.1:6379
-  password: iqianjinTest001*
+  password: root
   pool:
     max-active: 50
     max-idle: 1
@@ -49,7 +49,7 @@ redis:
   cluster:
     nodes: 192.168.101.1:6379,192.168.102.1:6379,192.168.103.1:6379
     max-redirects: 3
-  password: iqianjinTest001*
+  password: root
   pool:
     max-active: 50
     max-idle: 1
