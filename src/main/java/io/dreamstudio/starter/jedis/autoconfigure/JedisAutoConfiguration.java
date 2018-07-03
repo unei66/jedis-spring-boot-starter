@@ -49,7 +49,7 @@ public class JedisAutoConfiguration {
         int timeout = properties.getTimeout() !=null ? properties.getTimeout() : Constants.DEFAULT_TIMEOUT;
         int maxAttempts = clusterConfig.getMaxRedirects() !=null ? clusterConfig.getMaxRedirects() : Constants.DEFAULT_MAX_REDIRECTS;
         JedisCluster jc = new JedisCluster(nodes,
-                timeout, timeout, maxAttempts, properties.getPassword(), properties.getPool());
+                timeout, timeout, maxAttempts, properties.getPassword(), buildJedisPoolConfig(properties.getPool()));
         return jc;
     }
 
@@ -68,7 +68,7 @@ public class JedisAutoConfiguration {
 
         int timeout = properties.getTimeout() !=null ? properties.getTimeout() : Constants.DEFAULT_TIMEOUT;
         JedisSentinelPool pool = new JedisSentinelPool(masterName, nodes,
-                properties.getPool(), timeout, properties.getPassword(), properties.getDatabase());
+                buildJedisPoolConfig(properties.getPool()), timeout, properties.getPassword(), properties.getDatabase());
         return pool;
     }
 
@@ -77,7 +77,7 @@ public class JedisAutoConfiguration {
     @Conditional(StandaloneCondition.class)
     public JedisPool jedisPool() {
         int timeout = properties.getTimeout() !=null ? properties.getTimeout() : Constants.DEFAULT_TIMEOUT;
-        JedisPool pool = new JedisPool(properties.getPool(), properties.getHost(), properties.getPort(),
+        JedisPool pool = new JedisPool(buildJedisPoolConfig(properties.getPool()), properties.getHost(), properties.getPort(),
                 timeout, properties.getPassword(), properties.getDatabase());
         return pool;
     }
@@ -111,5 +111,20 @@ public class JedisAutoConfiguration {
 
             return conditionContext.getEnvironment().containsProperty(Constants.REDIS_CLUSTER_NODES_KEY);
         }
+    }
+
+    private JedisPoolConfig buildJedisPoolConfig(JedisProperties.PoolConfig config) {
+        JedisPoolConfig poolConfig = new JedisPoolConfig();
+        poolConfig.setMaxTotal(config.getMaxTotal());
+        poolConfig.setMaxIdle(config.getMaxIdle());
+        poolConfig.setMinIdle(config.getMinIdle());
+
+        poolConfig.setTestWhileIdle(config.isTestWhileIdle());
+        poolConfig.setTestOnBorrow(config.isTestOnBorrow());
+        poolConfig.setTestOnReturn(config.isTestOnReturn());
+
+        poolConfig.setMinEvictableIdleTimeMillis(config.getMinEvictableIdleTimeMillis());
+        poolConfig.setTimeBetweenEvictionRunsMillis(config.getTimeBetweenEvictionRunsMillis());
+        return poolConfig;
     }
 }
