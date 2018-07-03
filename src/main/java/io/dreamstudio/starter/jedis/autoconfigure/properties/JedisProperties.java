@@ -2,8 +2,6 @@ package io.dreamstudio.starter.jedis.autoconfigure.properties;
 
 import io.dreamstudio.starter.jedis.util.Constants;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import redis.clients.jedis.JedisPoolConfig;
-
 import java.util.List;
 
 /**
@@ -42,7 +40,7 @@ public class JedisProperties {
      */
     private Integer timeout;
 
-    private JedisPoolConfig pool;
+    private PoolConfig pool;
 
     private SentinelConfig sentinel;
 
@@ -96,11 +94,11 @@ public class JedisProperties {
         this.timeout = timeout;
     }
 
-    public JedisPoolConfig getPool() {
+    public PoolConfig getPool() {
         return pool;
     }
 
-    public void setPool(JedisPoolConfig pool) {
+    public void setPool(PoolConfig pool) {
         this.pool = pool;
     }
 
@@ -187,5 +185,83 @@ public class JedisProperties {
             this.maxRedirects = maxRedirects;
         }
 
+    }
+
+    /**
+     * Pool properties.
+     */
+    public static class PoolConfig {
+        private int maxTotal = 8;
+        private int maxIdle = 8;
+        private int minIdle = 0;
+        private boolean testWhileIdle = true;
+        private boolean testOnReturn = false;
+        private boolean testOnBorrow = false;
+        private long minEvictableIdleTimeMillis = 60000;
+        private long timeBetweenEvictionRunsMillis = 30000;
+
+        public int getMaxTotal() {
+            return maxTotal;
+        }
+
+        public void setMaxTotal(int maxTotal) {
+            this.maxTotal = maxTotal;
+        }
+
+        public int getMaxIdle() {
+            return maxIdle;
+        }
+
+        public void setMaxIdle(int maxIdle) {
+            this.maxIdle = maxIdle;
+        }
+
+        public int getMinIdle() {
+            return minIdle;
+        }
+
+        public void setMinIdle(int minIdle) {
+            this.minIdle = minIdle;
+        }
+
+        public boolean isTestWhileIdle() {
+            return testWhileIdle;
+        }
+
+        public void setTestWhileIdle(boolean testWhileIdle) {
+            this.testWhileIdle = testWhileIdle;
+        }
+
+        public boolean isTestOnReturn() {
+            return testOnReturn;
+        }
+
+        public void setTestOnReturn(boolean testOnReturn) {
+            this.testOnReturn = testOnReturn;
+        }
+
+        public boolean isTestOnBorrow() {
+            return testOnBorrow;
+        }
+
+        public void setTestOnBorrow(boolean testOnBorrow) {
+            this.testOnBorrow = testOnBorrow;
+        }
+
+        public long getMinEvictableIdleTimeMillis() {
+            return minEvictableIdleTimeMillis;
+        }
+
+        public void setMinEvictableIdleTimeMillis(long minEvictableIdleTimeMillis) {
+            this.minEvictableIdleTimeMillis = minEvictableIdleTimeMillis;
+        }
+
+        public long getTimeBetweenEvictionRunsMillis() {
+            return timeBetweenEvictionRunsMillis;
+        }
+
+        public void setTimeBetweenEvictionRunsMillis(long timeBetweenEvictionRunsMillis) {
+            this.timeBetweenEvictionRunsMillis = timeBetweenEvictionRunsMillis;
+        }
     }
 }
